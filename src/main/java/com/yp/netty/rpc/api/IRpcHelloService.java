@@ -5,4 +5,6 @@ package com.yp.netty.rpc.api;
  * @version Id: IRpcHelloService.java, v 0.1 2020/6/24 13:48 ex-yipeng Exp $
  */
 public interface IRpcHelloService {
+
+    String hello(String name);
 }
