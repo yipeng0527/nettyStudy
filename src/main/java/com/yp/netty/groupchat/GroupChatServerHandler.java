@@ -16,7 +16,7 @@ import java.util.Date;
  * @author ex-yipeng
  * @version Id: GroupChatServerHandler.java, v 0.1 2020/7/22 13:41 ex-yipeng Exp $
  */
-public class GroupChatServerHandler extends SimpleChannelInboundHandler {
+public class GroupChatServerHandler extends SimpleChannelInboundHandler<String> {
 
     //定义一个channel组 管理所有channel
     /**
@@ -55,13 +55,13 @@ public class GroupChatServerHandler extends SimpleChannelInboundHandler {
     }
 
     @Override
-    protected void channelRead0(ChannelHandlerContext ctx, Object o) throws Exception {
+    protected void channelRead0(ChannelHandlerContext ctx, String msg) throws Exception {
         Channel channel = ctx.channel();
         channelGroup.forEach(ch -> {
             if (ch != channel) {
-                ch.writeAndFlush(sdf.format(new Date()) + "[客户]" + channel.remoteAddress() + "发送了消息" + o + "\n");
+                ch.writeAndFlush(sdf.format(new Date()) + "[客户]" + channel.remoteAddress() + "发送了消息" + msg + "\n");
             } else {
-                ch.writeAndFlush(sdf.format(new Date()) + "[自己]发送了消息" + o + "\n");
+                ch.writeAndFlush(sdf.format(new Date()) + "[自己]发送了消息" + msg + "\n");
             }
         });
     }
