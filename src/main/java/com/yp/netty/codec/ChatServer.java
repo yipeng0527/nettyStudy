@@ -6,6 +6,8 @@ import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.handler.codec.protobuf.ProtobufDecoder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Created by pp on 2020/7/26.
@@ -13,6 +15,8 @@ import io.netty.handler.codec.protobuf.ProtobufDecoder;
 public class ChatServer {
 
     private int port;
+
+    private Logger log = LoggerFactory.getLogger(ChatServer.class);
 
     public ChatServer(int port) {
         this.port = port;
@@ -44,9 +48,9 @@ public class ChatServer {
                 @Override
                 public void operationComplete(ChannelFuture channelFuture) throws Exception {
                     if (channelFuture.isSuccess()) {
-                        System.out.println("监听端口" + port + "成功");
+                        log.info("监听端口{}成功", port);
                     } else {
-                        System.out.println("监听端口" + port + "失败");
+                        log.info("监听端口{}失败", port);
                     }
                 }
             });
