@@ -3,7 +3,7 @@ package com.yp.netty.inBoundAndOutBound;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.nio.NioEventLoopGroup;
-import io.netty.channel.socket.SocketChannel;
+import io.netty.channel.socket.nio.NioSocketChannel;
 
 /**
  * @author ex-yipeng
@@ -16,7 +16,7 @@ public class MyClient {
         try{
             Bootstrap client = new Bootstrap();
             client.group(group)
-                    .channel(SocketChannel.class)
+                    .channel(NioSocketChannel.class)
                     .handler(new MyClientInitializer());
 
             ChannelFuture channelFuture = client.connect("127.0.0.1", 7000).sync();
