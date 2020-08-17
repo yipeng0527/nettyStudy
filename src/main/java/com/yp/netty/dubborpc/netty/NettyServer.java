@@ -4,6 +4,7 @@ import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelPipeline;
+import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
@@ -20,8 +21,8 @@ public class NettyServer {
     }
 
     private static void startServer0(String hostName, int port) {
-        NioEventLoopGroup bossGroup = new NioEventLoopGroup(1);
-        NioEventLoopGroup workerGroup = new NioEventLoopGroup();
+        EventLoopGroup bossGroup = new NioEventLoopGroup(1);
+        EventLoopGroup workerGroup = new NioEventLoopGroup();
 
         try {
             ServerBootstrap server = new ServerBootstrap();
@@ -33,7 +34,7 @@ public class NettyServer {
                             ChannelPipeline pipeline = socketChannel.pipeline();
                             pipeline.addLast(new StringDecoder());
                             pipeline.addLast(new StringEncoder());
-                            pipeline.addLast(new NettyServerHandler());
+                            pipeline.addLast(new NettyServerHandler()); //业务处理器
                         }
                     });
 

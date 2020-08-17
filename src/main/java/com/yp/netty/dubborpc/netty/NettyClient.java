@@ -4,14 +4,12 @@ import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelPipeline;
+import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
 import io.netty.handler.codec.string.StringDecoder;
 import io.netty.handler.codec.string.StringEncoder;
-
-import java.lang.reflect.InvocationHandler;
-import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -21,8 +19,7 @@ import java.util.concurrent.Executors;
  */
 public class NettyClient {
 
-    private ExecutorService executor =
-            Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors() * 2);
+    private static ExecutorService executor = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
 
     private int count = 0;
 
@@ -40,7 +37,7 @@ public class NettyClient {
 
     private static void initClient() {
         clientHandler = new NettyClientHandler();
-        NioEventLoopGroup group = new NioEventLoopGroup();
+        EventLoopGroup group = new NioEventLoopGroup();
 
         try {
             Bootstrap client = new Bootstrap();
@@ -51,14 +48,14 @@ public class NettyClient {
                         @Override
                         protected void initChannel(SocketChannel socketChannel) throws Exception {
                             ChannelPipeline pipeline = socketChannel.pipeline();
-                            pipeline.addLast(new StringEncoder());
                             pipeline.addLast(new StringDecoder());
+                            pipeline.addLast(new StringEncoder());
                             pipeline.addLast(clientHandler);
                         }
                     });
 
             ChannelFuture channelFuture = client.connect("127.0.0.1", 8888).sync();
-            channelFuture.channel().closeFuture().sync();
+            //channelFuture.channel().closeFuture().sync();
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
